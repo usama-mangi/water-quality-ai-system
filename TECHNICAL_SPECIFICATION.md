@@ -711,45 +711,7 @@ water-quality-ai-system/
 
 ---
 
-## 13. Development Timeline (35 hours)
-
-### Week 1: MVP Development
-
-#### Day 1-2 (10 hours): Backend & Database Setup
-
-- PostgreSQL setup with TimescaleDB
-- Express.js/FastAPI project scaffold
-- User authentication & JWT implementation
-- Water quality and station endpoints
-- Initial Dockerfile setup
-
-#### Day 3 (7 hours): Frontend & Real-time
-
-- React project setup (Vite)
-- Dashboard layout and navigation
-- Station map component
-- Chart.js for metrics visualization
-- WebSocket integration for real-time data
-
-#### Day 4 (10 hours): ML Integration & Alerts
-
-- Isolation Forest anomaly detection model
-- Model integration with backend API
-- Alert system implementation
-- Email/push notification service
-- ML inference pipeline (< 100ms latency)
-
-#### Day 5 (8 hours): Polish & Deployment
-
-- UI/UX refinement and responsive design
-- Performance optimization
-- Docker Compose setup and testing
-- Deploy to Railway/Render
-- README and basic documentation
-
----
-
-## 14. Success Metrics (Definition of Done)
+## 13. Success Metrics (Definition of Done)
 
 ### Functional Requirements
 
@@ -781,7 +743,7 @@ water-quality-ai-system/
 
 ---
 
-## 15. Known Limitations & Future Enhancements
+## 14. Known Limitations & Future Enhancements
 
 ### Current Limitations (MVP)
 
@@ -800,7 +762,7 @@ water-quality-ai-system/
 
 ---
 
-## 16. Glossary
+## 15. Glossary
 
 | Term             | Definition                                                                   |
 | ---------------- | ---------------------------------------------------------------------------- |
@@ -815,9 +777,9 @@ water-quality-ai-system/
 | RTO              | Recovery Time Objective - maximum acceptable downtime                        |
 | RPO              | Recovery Point Objective - maximum acceptable data loss                      |
 
-## 17. Appendix: Code Templates
+## 16. Appendix: Code Templates
 
-### 17.1 Example API Endpoint (Express.js)
+### 16.1 Example API Endpoint (Express.js)
 
 ```javascript
 // routes/waterQuality.js
@@ -911,7 +873,7 @@ router.post("/readings", auth, async (req, res) => {
 module.exports = router;
 ```
 
-### 17.2 Example ML Model (Python)
+### 16.2 Example ML Model (Python)
 
 ```python
 # ml_service/anomaly_detector.py
