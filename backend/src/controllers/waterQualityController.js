@@ -1,4 +1,9 @@
 const WaterQuality = require('../models/waterQualityModel');
+const Alert = require('../models/alertModel');
+const notification = require('../utils/notification');
+const axios = require('axios');
+
+const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://ml-service:5000';
 
 const createReading = async (req, res) => {
   try {
@@ -7,13 +12,50 @@ const createReading = async (req, res) => {
       ammonia, nitrates, chlorophyll_a
     } = req.body;
 
-    // Validate station_id exists? Foreign key constraint will handle it, 
-    // but nicer to check. For MVP, let DB handle constraint errors.
+    // Detect Anomaly via ML Service
+    let anomaly_score = null;
+    let is_anomaly = false;
+
+    try {
+      const mlResponse = await axios.post(`${ML_SERVICE_URL}/predict`, {
+        ph, dissolved_oxygen, temperature, turbidity, conductivity
+      });
+      anomaly_score = mlResponse.data.anomaly_score;
+      is_anomaly = mlResponse.data.is_anomaly;
+    } catch (mlError) {
+      console.error('ML Service Error:', mlError.message);
+    }
 
     const reading = await WaterQuality.addReading({
       station_id, ph, dissolved_oxygen, temperature, turbidity, conductivity,
-      ammonia, nitrates, chlorophyll_a
+      ammonia, nitrates, chlorophyll_a,
+      anomaly_score, is_anomaly
     });
+
+    // Handle Anomaly Alert
+    if (is_anomaly) {
+      const alert = await Alert.createAlert({
+        station_id,
+        alert_type: 'ANOMALY_DETECTED',
+        severity: 'HIGH',
+        description: `Anomaly detected in water quality parameters at station ${station_id}`,
+        parameter: 'MULTI_PARAMETER',
+        actual_value: anomaly_score,
+        recipients: ['admin@example.com'] // Mock recipient
+      });
+
+      await notification.notify(alert);
+
+      const io = req.app.get('io');
+      if (io) {
+        io.emit('anomaly_detected', {
+          station_id,
+          reading_id: reading.id,
+          alert_id: alert.id,
+          timestamp: reading.timestamp
+        });
+      }
+    }
 
     res.status(201).json({
       status: 201,

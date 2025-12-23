@@ -41,6 +41,17 @@ services:
       - water-quality-net
     restart: unless-stopped
 
+  ml-service:
+    build: ./ml-service
+    container_name: water_quality_ml
+    environment:
+      - PORT=5000
+    ports:
+      - "5000:5000"
+    networks:
+      - water-quality-net
+    restart: unless-stopped
+
 networks:
   water-quality-net:
     driver: bridge

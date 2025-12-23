@@ -3,22 +3,19 @@ const db = require('../config/db');
 const addReading = async (readingData) => {
   const {
     station_id, ph, dissolved_oxygen, temperature, turbidity, conductivity,
-    ammonia, nitrates, chlorophyll_a
+    ammonia, nitrates, chlorophyll_a, anomaly_score, is_anomaly
   } = readingData;
 
-  // quality_index and anomaly_score would typically be calculated by a separate service or function
-  // For now, we'll insert them as null or defaults if provided
-  
   const query = `
     INSERT INTO water_quality_readings 
-    (station_id, timestamp, ph, dissolved_oxygen, temperature, turbidity, conductivity, ammonia, nitrates, chlorophyll_a)
-    VALUES ($1, NOW(), $2, $3, $4, $5, $6, $7, $8, $9)
+    (station_id, timestamp, ph, dissolved_oxygen, temperature, turbidity, conductivity, ammonia, nitrates, chlorophyll_a, anomaly_score, is_anomaly)
+    VALUES ($1, NOW(), $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
     RETURNING *;
   `;
 
   const values = [
     station_id, ph, dissolved_oxygen, temperature, turbidity, conductivity,
-    ammonia, nitrates, chlorophyll_a
+    ammonia, nitrates, chlorophyll_a, anomaly_score, is_anomaly
   ];
 
   const { rows } = await db.query(query, values);

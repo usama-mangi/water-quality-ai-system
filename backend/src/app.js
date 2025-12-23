@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const authRoutes = require('./routes/authRoutes');
 const stationRoutes = require('./routes/stationRoutes');
 const waterQualityRoutes = require('./routes/waterQualityRoutes');
+const alertRoutes = require('./routes/alertRoutes');
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(morgan('dev'));
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/stations', stationRoutes);
 app.use('/api/v1/water-quality', waterQualityRoutes);
+app.use('/api/v1/alerts', alertRoutes);
 
 // Basic health check route
 app.get('/health', (req, res) => {
